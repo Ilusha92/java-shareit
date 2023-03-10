@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.model;
 
 import lombok.Data;
+import lombok.NonNull;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.LinkedList;
@@ -14,7 +15,7 @@ import java.util.TreeSet;
 @Data
 public class User {
 
-    private long id;
+    private int id;
     private String name;
     private String email;
 
