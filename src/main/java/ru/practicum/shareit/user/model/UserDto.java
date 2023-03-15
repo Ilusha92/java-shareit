@@ -1,17 +1,16 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.user.model;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 @Data
 public class UserDto {
-
     @NotNull
     private String name;
-    @NotNull
     @Email
+    @NotNull
     private String email;
+
 }

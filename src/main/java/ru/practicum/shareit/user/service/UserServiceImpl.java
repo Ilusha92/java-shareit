@@ -1,64 +1,44 @@
 package ru.practicum.shareit.user.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserDto;
+import ru.practicum.shareit.user.storage.dao.UserDao;
+
+import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    private static Map<Integer, UserDto> userMap = new HashMap<>();
-    private static int idCounter = 0;
-
-    private static int generateId() {
-        return ++idCounter;
-    }
-
-    private static void userValidate(UserDto userDto) {
-        if (userDto.getName() == null || userDto.getName().isBlank()){
-            throw new RuntimeException();
-        }
-        if (userDto.getEmail() == null){
-            throw new RuntimeException();
-        }
-        if (userMap.containsKey(userDto.getEmail())){
-            throw new RuntimeException();
-        }
-    }
+    private UserDao userDao;
 
     @Override
     public User createUser(UserDto userDto) {
-        userValidate(userDto);
-        User user = new User();
-        user.setId(generateId());
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        return user;
+        return userDao.createUser(userDto);
     }
 
     @Override
-    public User updateUser(UserDto userDto) {
-        if (userMap.containsKey(userDto.getEmail())){
-            throw new RuntimeException();
-        }
+    public User updateUser(long userId, UserDto userDto) {
+        return userDao.updateUser(userId, userDto);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return userList;
+        return userDao.getAllUsers();
     }
 
     @Override
-    public User getUserById(int id) {
-        return userList.get(id);
+    public User getUserById(long userId) {
+        return userDao.getUserById(userId);
     }
 
     @Override
-    public void deleteUserById(int id) {
-
+    public void deleteUserById(long userId) {
+        userDao.deleteUserById(userId);
     }
+
+
 }
