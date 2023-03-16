@@ -1,9 +1,9 @@
 package ru.practicum.shareit.item.storage.impl;
 
 import org.springframework.stereotype.Repository;
+import ru.practicum.shareit.item.exceptions.DeniedAccessException;
 import ru.practicum.shareit.item.exceptions.ItemNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.storage.dao.ItemDao;
 
 import java.util.ArrayList;
@@ -18,12 +18,9 @@ public class InMemoryItemStorage implements ItemDao {
     private long idCounter = 1;
 
     @Override
-    public Item createItem(ItemDto itemDto) {
-        Item item = new Item();
+    public Item createItem(Item item) {
         item.setId(idCounter++);
-        item.setName(itemDto.getName());
-        item.setDescription(itemDto.getDescription());
-        item.setAvailable(itemDto.getAvailable());
+        itemMap.put(item.getId(), item);
         return item;
     }
 
@@ -34,9 +31,10 @@ public class InMemoryItemStorage implements ItemDao {
             throw new ItemNotFoundException("this item not found in storage");
         }
         Item itemFromStorage = itemMap.get(itemId);
-        itemFromStorage.setName(item.getName());
-        itemFromStorage.setDescription(item.getDescription());
-        itemFromStorage.setAvailable(item.getAvailable());
+        if (!itemFromStorage.getOwnerId().equals(item.getOwnerId())) {
+            throw new DeniedAccessException("userId: " + item.getOwnerId() + "is not owner of this item" + itemId);
+        }
+        refreshItem(itemFromStorage, item);
         return itemFromStorage;
     }
 
@@ -58,10 +56,34 @@ public class InMemoryItemStorage implements ItemDao {
     @Override
     public List<Item> findItemsByRequest(String text) {
         List<Item> result = new ArrayList<>();
+        String wantedItem = text.toLowerCase();
+
         for (Item item : itemMap.values()) {
-            if (item.getName().equals(text))
+            String itemName = item.getName().toLowerCase();
+            String itemDescription = item.getDescription().toLowerCase();
+
+            if ((itemName.contains(wantedItem) || itemDescription.contains(wantedItem))
+                    && item.getAvailable().equals(true)) {
                 result.add(item);
+            }
         }
         return result;
+    }
+
+    private void refreshItem(Item oldEntry, Item newEntry) {
+        String name = newEntry.getName();
+        if (name != null) {
+            oldEntry.setName(name);
+        }
+
+        String description = newEntry.getDescription();
+        if (description != null) {
+            oldEntry.setDescription(description);
+        }
+
+        Boolean available = newEntry.getAvailable();
+        if (available != null) {
+            oldEntry.setAvailable(available);
+        }
     }
 }

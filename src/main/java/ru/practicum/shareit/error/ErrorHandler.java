@@ -42,4 +42,5 @@ public class ErrorHandler {
     public ErrorResponse handle(MethodArgumentNotValidException e) {
         return new ErrorResponse("Validation error", e.getMessage());
     }
+
 }
