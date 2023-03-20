@@ -32,6 +32,7 @@ public class ItemServiceImpl implements ItemService{
         List<User> users = userDao.getAllUsers();
         List<User> result = users.stream().filter(user -> user.getId() == ownerId).collect(Collectors.toList());
         return result.size() > 0;
+//        return userDao.getUserById(ownerId) > 0;
     }
 
     @Override

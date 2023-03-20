@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.model.UserDto;
@@ -10,19 +11,12 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
+@AllArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
 
     private UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping
     public User createUser(@Valid @RequestBody UserDto userDto) {

@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.model.Item;
@@ -10,21 +12,13 @@ import ru.practicum.shareit.item.service.ItemService;
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
+@AllArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
 
     private ItemService itemService;
     private ItemMapper itemMapper;
-
-    @Autowired
-    public ItemController(ItemService itemService, ItemMapper itemMapper) {
-        this.itemService = itemService;
-        this.itemMapper = itemMapper;
-    }
 
     @PostMapping
     public ItemDto createItem(@Valid @RequestBody ItemDto itemDto,
