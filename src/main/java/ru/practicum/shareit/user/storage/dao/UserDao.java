@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.storage.dao;
 
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
 
 import java.util.List;
 

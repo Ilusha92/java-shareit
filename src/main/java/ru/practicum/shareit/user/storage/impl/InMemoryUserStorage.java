@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.exceptions.EmailValidationException;
 import ru.practicum.shareit.user.exceptions.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.storage.dao.UserDao;
 
 import java.util.*;
