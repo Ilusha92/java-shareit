@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class ItemServiceImpl implements ItemService{
+public class ItemServiceImpl implements ItemService {
 
     private ItemDao itemDao;
     private UserDao userDao;
@@ -22,7 +22,7 @@ public class ItemServiceImpl implements ItemService{
     @Override
     public Item createItem(Item item) {
         boolean ownerExists = isOwnerExists(item.getOwnerId());
-        if (!ownerExists){
+        if (!ownerExists) {
             throw new OwnerNotFoundException("owner not found");
         }
         return itemDao.createItem(item);

@@ -16,7 +16,7 @@ public class InMemoryUserStorage implements UserDao {
     private final Set<String> emails = new HashSet<>();
     private long idCounter = 1;
 
-    private void checkEmailInEmailsList (String email) {
+    private void checkEmailInEmailsList(String email) {
         if (emails.contains(email)) throw new EmailValidationException("This email is registered");
     }
 
@@ -43,10 +43,10 @@ public class InMemoryUserStorage implements UserDao {
 
     @Override
     public User updateUser(long id, UserDto userDto) {
-        if (!userMap.containsKey(id)){
+        if (!userMap.containsKey(id)) {
             throw new UserNotFoundException("User not found");
         }
-        User userToUpdate= userMap.get(id);
+        User userToUpdate = userMap.get(id);
         String userToUpdateEmail = userMap.get(id).getEmail();
         String userDtoEmail = userDto.getEmail();
 
@@ -67,7 +67,7 @@ public class InMemoryUserStorage implements UserDao {
 
     @Override
     public User getUserById(long id) {
-        if (!userMap.containsKey(id)){
+        if (!userMap.containsKey(id)) {
             throw new UserNotFoundException("User not found");
         }
         return userMap.get(id);
@@ -75,7 +75,7 @@ public class InMemoryUserStorage implements UserDao {
 
     @Override
     public void deleteUserById(long id) {
-        if (!userMap.containsKey(id)){
+        if (!userMap.containsKey(id)) {
             throw new UserNotFoundException("User not found");
         }
         emails.remove(userMap.get(id).getEmail());

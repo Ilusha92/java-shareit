@@ -14,5 +14,4 @@ public interface ItemDao {
     Item getItemById(Long id);
 
     List<Item> findItemsByRequest(String text);
-    
 }

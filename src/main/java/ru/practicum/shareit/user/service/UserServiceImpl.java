@@ -11,7 +11,7 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
 
@@ -39,6 +39,5 @@ public class UserServiceImpl implements UserService{
     public void deleteUserById(long userId) {
         userDao.deleteUserById(userId);
     }
-
-
+    
 }
