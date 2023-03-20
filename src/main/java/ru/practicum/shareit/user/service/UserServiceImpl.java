@@ -16,13 +16,13 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public User createUser(UserDto userDto) {
-        return userDao.createUser(userDto);
+    public User createUser(User user) {
+        return userDao.createUser(user);
     }
 
     @Override
-    public User updateUser(long userId, UserDto userDto) {
-        return userDao.updateUser(userId, userDto);
+    public User updateUser(long userId, User user) {
+        return userDao.updateUser(userId, user);
     }
 
     @Override

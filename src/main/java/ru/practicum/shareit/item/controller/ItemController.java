@@ -36,18 +36,21 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<Item> getAllItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
-        return itemService.getAllItems(ownerId);
+    public List<ItemDto> getAllItems(@RequestHeader("X-Sharer-User-Id") Long ownerId) {
+        List<Item> ownerItems = itemService.getAllItems(ownerId);
+        return itemMapper.toItemDtoList(ownerItems);
     }
 
     @GetMapping("/{itemId}")
-    public Item getItemById(@PathVariable ("itemId") Long itemId) {
-        return itemService.getItemById(itemId);
+    public ItemDto getItemById(@PathVariable ("itemId") Long itemId) {
+        Item item = itemService.getItemById(itemId);
+        return itemMapper.toItemDto(item);
     }
 
     @GetMapping("/search")
-    public List<Item> findItemsByRequest(@RequestParam String text) {
-        return itemService.findItemsByRequest(text);
+    public List<ItemDto> findItemsByRequest(@RequestParam String text) {
+        List<Item> searchResult = itemService.findItemsByRequest(text);
+        return itemMapper.toItemDtoList(searchResult);
     }
 
 }

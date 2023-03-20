@@ -30,32 +30,29 @@ public class InMemoryUserStorage implements UserDao {
     }
 
     @Override
-    public User createUser(UserDto userDto) {
-        checkEmailInEmailsList(userDto.getEmail());
-        User user = new User();
+    public User createUser(User user) {
+        checkEmailInEmailsList(user.getEmail());
         user.setId(idCounter++);
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
         userMap.put(user.getId(), user);
         emails.add(user.getEmail());
         return user;
     }
 
     @Override
-    public User updateUser(long id, UserDto userDto) {
+    public User updateUser(long id, User user) {
         if (!userMap.containsKey(id)) {
             throw new UserNotFoundException("User not found");
         }
         User userToUpdate = userMap.get(id);
         String userToUpdateEmail = userMap.get(id).getEmail();
-        String userDtoEmail = userDto.getEmail();
+        String newUserEmail = user.getEmail();
 
-        if (userDto.getName() != null) {
-            userToUpdate.setName(userDto.getName());
+        if (user.getName() != null) {
+            userToUpdate.setName(user.getName());
         }
-        if (userDtoEmail != null && !userToUpdateEmail.equals(userDtoEmail)) {
-            tryRefreshUserEmail(userToUpdateEmail, userDtoEmail);
-            userToUpdate.setEmail(userDtoEmail);
+        if (newUserEmail != null && !userToUpdateEmail.equals(newUserEmail)) {
+            tryRefreshUserEmail(userToUpdateEmail, newUserEmail);
+            userToUpdate.setEmail(newUserEmail);
         }
         return userToUpdate;
     }
