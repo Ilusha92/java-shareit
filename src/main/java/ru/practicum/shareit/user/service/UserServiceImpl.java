@@ -2,12 +2,10 @@ package ru.practicum.shareit.user.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.model.UserDto;
 import ru.practicum.shareit.user.storage.dao.UserDao;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
