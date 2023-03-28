@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.exceptions.OwnerNotFoundException;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.storage.dao.ItemDao;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.storage.dao.UserDao;
+import ru.practicum.shareit.user.service.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +15,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    private ItemDao itemDao;
-    private UserDao userDao;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+//    private final BookingRepository bookingRepository;
+//    private final CommentRepository commentRepository;
 
     @Override
     public Item createItem(Item item) {
