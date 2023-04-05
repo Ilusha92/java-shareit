@@ -136,13 +136,14 @@ public class ItemServiceImpl implements ItemService {
     }
 
     private void fillItemDtoList(List<ItemDto> targetList, List<Item> foundItems, Long userId) {
-//        LocalDateTime now = LocalDateTime.now();
-        Sort sortDesc = Sort.by("start").ascending();
+        LocalDateTime now = LocalDateTime.now();
+        Sort sortDesc = Sort.by("start").descending();
+        Sort sortAsc = Sort.by("start").ascending();
 
         for (Item item : foundItems) {
             List<Comment> comments = commentRepository.findByItemId(item.getId());
             if (item.getOwnerId().equals(userId)) {
-                ItemDto dto = constructItemDtoForOwner(item, sortDesc, comments);
+                ItemDto dto = constructItemDtoForOwner(item, sortDesc,sortAsc, comments);
                 targetList.add(dto);
             } else {
                 targetList.add(ItemMapper.toItemDto(item, comments));
@@ -156,21 +157,21 @@ public class ItemServiceImpl implements ItemService {
         List<Comment> comments = commentRepository.findByItemId(itemId);
 
         if (item.getOwnerId().equals(userId)) {
-//            LocalDateTime now = LocalDateTime.now();
-//            log.info(String.valueOf(LocalDateTime.now()));
+            LocalDateTime now = LocalDateTime.now();
             Sort sortDesc = Sort.by("start").descending();
-            return constructItemDtoForOwner(item, sortDesc, comments);
+            Sort sortAsc = Sort.by("start").ascending();
+            return constructItemDtoForOwner(item, sortDesc,sortAsc, comments);
         }
         return ItemMapper.toDto(item, null, null, comments);
     }
 
-    private ItemDto constructItemDtoForOwner(Item item, Sort sortDesc,  List<Comment> comments) {
+    private ItemDto constructItemDtoForOwner(Item item, Sort sortDesc, Sort sortAsc, List<Comment> comments) {
         Booking lastBooking =
                 bookingRepository.findBookingByItemIdAndEndBefore(item.getId(), LocalDateTime.now(), sortDesc)
                 .stream().findFirst().orElse(null);
 
         Booking nextBooking =
-                bookingRepository.findBookingByItemIdAndStartAfter(item.getId(), LocalDateTime.now(), sortDesc)
+                bookingRepository.findBookingByItemIdAndStartAfter(item.getId(), LocalDateTime.now(), sortAsc)
                 .stream().findFirst().orElse(null);
 
         return ItemMapper.toDto(item,
