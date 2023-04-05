@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.service.BookingRepository;
 import ru.practicum.shareit.item.exceptions.CommentException;
 import ru.practicum.shareit.item.exceptions.DeniedAccessException;
@@ -167,11 +168,11 @@ public class ItemServiceImpl implements ItemService {
 
     private ItemDto constructItemDtoForOwner(Item item, Sort sortDesc, Sort sortAsc, List<Comment> comments) {
         Booking lastBooking =
-                bookingRepository.findBookingByItemIdAndEndBefore(item.getId(), LocalDateTime.now(), sortDesc)
+                bookingRepository.findBookingByItemIdAndEndBeforeAndStatus(item.getId(), LocalDateTime.now(), sortDesc, Status.APPROVED)
                         .stream().findFirst().orElse(null);
 
         Booking nextBooking =
-                bookingRepository.findBookingByItemIdAndStartAfter(item.getId(), LocalDateTime.now(), sortAsc)
+                bookingRepository.findBookingByItemIdAndStartAfterAndStatus(item.getId(), LocalDateTime.now(), sortAsc, Status.APPROVED)
                         .stream().findFirst().orElse(null);
 
         return ItemMapper.toDto(item,
