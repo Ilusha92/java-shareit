@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class BookingMapper {
 
     public static Booking toNewBooking(BookingIncomingDto bookingIncomingDto, Item item, User booker) {
-        return new Booking (null, bookingIncomingDto.getStart(), bookingIncomingDto.getEnd(), item, booker, Status.WAITING);
+        return new Booking(null, bookingIncomingDto.getStart(), bookingIncomingDto.getEnd(), item, booker, Status.WAITING);
     }
 
     public static BookingResponseDto toBookingResponseDto(Booking booking, User booker, Item item) {
@@ -25,7 +25,7 @@ public class BookingMapper {
 
     public static List<BookingDto> toListBookingDto(List<Booking> bookings) {
             return bookings.stream().map(BookingMapper::toBookingDto).collect(Collectors.toList());
-        }
+    }
 
     public static BookingInItemDto bookingInItemDto(Booking booking) {
         if (booking == null) return null;
