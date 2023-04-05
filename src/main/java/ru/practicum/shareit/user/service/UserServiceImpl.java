@@ -31,11 +31,11 @@ public class UserServiceImpl implements UserService {
     private User patchUser(UserDto userDto, long userId) {
         UserDto userDtoToUpdate = getUserById(userId);
 
-        if (userDto.getName() != null && !userDto.getName().isBlank()){
+        if (userDto.getName() != null && !userDto.getName().isBlank()) {
             userDtoToUpdate.setName(userDto.getName());
         }
 
-        if (userDto.getEmail() !=null && !userDto.getEmail().isBlank()) {
+        if (userDto.getEmail() != null && !userDto.getEmail().isBlank()) {
             userDtoToUpdate.setEmail(userDto.getEmail());
         }
         return UserMapper.toUser(userDtoToUpdate, userId);

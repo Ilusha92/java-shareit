@@ -30,17 +30,17 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingResponseDto createBooking(BookingIncomingDto bookingIncomingDto, Long userId) {
 
-        if(!bookingIncomingDto.getEnd().isAfter(bookingIncomingDto.getStart())) {
+        if (!bookingIncomingDto.getEnd().isAfter(bookingIncomingDto.getStart())) {
             throw new IllegalArgumentException("Validation exception with startBookingTime and endBookingTime, check the values");
         }
 
         User user = userRepository.findById(userId).orElseThrow();
         Item item = itemRepository.findById(bookingIncomingDto.getItemId()).orElseThrow();
 
-        if(userId.equals(item.getOwnerId())) {
+        if (userId.equals(item.getOwnerId())) {
             throw new BookerAndOwnerIdException("Owner cant book his item");
         }
-        if(!item.getAvailable()) {
+        if (!item.getAvailable()) {
             throw new UnavailableItemException("Item is not available now");
         }
 
