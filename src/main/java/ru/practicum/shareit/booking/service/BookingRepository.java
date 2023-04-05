@@ -55,13 +55,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             " and b.booker.id = ?2" +
             " and b.end < ?3")
     List<Booking> findBookingsForAddComments(Long itemId, Long userId, LocalDateTime now);
-
-    @Query("select b from bookings b " +
-            " where b.item.id = ?1" +
-            " and b.start <= ?2"+
-            " and b.status like 'APPROVED'" +
-            " order by b.end desc")
-    Booking findLastBookingByItemId(Long itemId);
 }
 
 
