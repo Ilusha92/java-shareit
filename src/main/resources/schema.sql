@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(255) NOT NULL,
     description VARCHAR(512) NOT NULL,
     available BOOLEAN NOT NULL,
-    owner BIGINT REFERENCES users (user_id) NOT NULL,
+    owner_id BIGINT REFERENCES users (user_id) NOT NULL,
     PRIMARY KEY (item_id)
     );
 
