@@ -1,6 +1,5 @@
 package ru.practicum.shareit.item.model;
 
-import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;

@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.practicum.shareit.booking.model.BookingInItemDto;
-import ru.practicum.shareit.booking.model.BookingIncomingDto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

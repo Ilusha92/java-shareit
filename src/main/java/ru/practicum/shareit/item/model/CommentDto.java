@@ -4,7 +4,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter @Builder
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDto {

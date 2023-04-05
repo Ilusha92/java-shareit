@@ -14,9 +14,4 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "where upper(i.name) like upper(concat('%', ?1, '%')) " +
             " or upper(i.description) like upper(concat('%', ?1, '%')) and i.available = true")
     List<Item> search(String text);
-
-    @Query("SELECT b FROM  bookings b " +
-            "WHERE b.item.id = :itemId AND b.item.ownerId = :userId AND b.status = 'APPROVED' AND b.end < :now " +
-            "ORDER BY b.start DESC")
-    Booking findLastBooking(LocalDateTime now, Long userId, Long itemId);
 }

@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,15 +42,4 @@ public class ItemMapper {
         return dto;
     }
 
-//    public List<ItemDto> toItemDtoList(List<Item> items) {
-//        if (items.isEmpty()) {
-//            return new ArrayList<>();
-//        }
-//        List<ItemDto> result = new ArrayList<>();
-//        for (Item item : items) {
-//            ItemDto itemDto = toItemDto(item);
-//            result.add(itemDto);
-//        }
-//        return result;
-//    }
 }

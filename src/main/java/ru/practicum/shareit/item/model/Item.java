@@ -23,7 +23,7 @@ public class Item {
     private String description;
     @Column(name = "available",nullable = false)
     private Boolean available;
-    @Column(name = "ownerId",nullable = false)
+    @Column(name = "owner_Id",nullable = false)
     private Long ownerId;
 
     @Override

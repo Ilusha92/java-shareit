@@ -4,7 +4,9 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter @Setter @Builder
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCommentDto {

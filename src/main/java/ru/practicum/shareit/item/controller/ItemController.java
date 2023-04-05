@@ -1,16 +1,14 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.model.BookingDto;
-import ru.practicum.shareit.item.model.*;
+import ru.practicum.shareit.item.model.CommentDto;
+import ru.practicum.shareit.item.model.CreateCommentDto;
+import ru.practicum.shareit.item.model.ItemDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import java.awt.print.Book;
 import java.util.List;
 
 @RestController

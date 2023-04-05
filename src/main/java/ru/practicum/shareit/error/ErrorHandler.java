@@ -19,36 +19,6 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse handle(EmailValidationException e) {
-//        return new ErrorResponse("This email is registered", e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handle(UserNotFoundException e) {
-//        return new ErrorResponse("User not found", e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
-//    public ErrorResponse handle(OwnerNotFoundException e) {
-//        return new ErrorResponse("Owner not found", e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
-//    public ErrorResponse handle(DeniedAccessException e) {
-//        return new ErrorResponse("Denied access", e.getMessage());
-//    }
-//
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    public ErrorResponse handle(MethodArgumentNotValidException e) {
-//        return new ErrorResponse("Validation error", e.getMessage());
-//    }
-
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handle(EmailValidationException e) {
