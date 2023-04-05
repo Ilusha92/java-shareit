@@ -144,7 +144,7 @@ public class ItemServiceImpl implements ItemService {
         for (Item item : foundItems) {
             List<Comment> comments = commentRepository.findByItemId(item.getId());
             if (item.getOwnerId().equals(userId)) {
-                ItemDto dto = constructItemDtoForOwner(item, sortDesc,sortAsc, comments);
+                ItemDto dto = constructItemDtoForOwner(item, now, sortDesc, sortAsc, comments);
                 targetList.add(dto);
             } else {
                 targetList.add(ItemMapper.toItemDto(item, comments));
@@ -161,18 +161,17 @@ public class ItemServiceImpl implements ItemService {
             LocalDateTime now = LocalDateTime.now();
             Sort sortDesc = Sort.by("start").descending();
             Sort sortAsc = Sort.by("start").ascending();
-            return constructItemDtoForOwner(item, sortDesc,sortAsc, comments);
+            return constructItemDtoForOwner(item, now, sortDesc, sortAsc, comments);
         }
         return ItemMapper.toDto(item, null, null, comments);
     }
 
-    private ItemDto constructItemDtoForOwner(Item item, Sort sortDesc, Sort sortAsc, List<Comment> comments) {
+    private ItemDto constructItemDtoForOwner(Item item, LocalDateTime now, Sort sortDesc, Sort sortAsc, List<Comment> comments) {
         Booking lastBooking =
-                bookingRepository.findBookingByItemIdAndEndBeforeAndStatus(item.getId(), LocalDateTime.now(), sortDesc, Status.APPROVED)
+                bookingRepository.findBookingByItemIdAndStartBeforeAndStatus(item.getId(), now, sortDesc, Status.APPROVED)
                         .stream().findFirst().orElse(null);
-
         Booking nextBooking =
-                bookingRepository.findBookingByItemIdAndStartAfterAndStatus(item.getId(), LocalDateTime.now(), sortAsc, Status.APPROVED)
+                bookingRepository.findBookingByItemIdAndStartAfterAndStatus(item.getId(), now, sortAsc, Status.APPROVED)
                         .stream().findFirst().orElse(null);
 
         return ItemMapper.toDto(item,
