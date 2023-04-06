@@ -1,12 +1,13 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 
 import java.util.List;
 
-@Service
+@UtilityClass
 public class ItemMapper {
 
     public static ItemDto toItemDto(Item item, List<Comment> comments) {

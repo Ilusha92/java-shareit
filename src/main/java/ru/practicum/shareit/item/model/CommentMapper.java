@@ -1,12 +1,13 @@
 package ru.practicum.shareit.item.model;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@UtilityClass
 public class CommentMapper {
 
     public static Comment toComment(CreateCommentDto dto, Item item, User author) {

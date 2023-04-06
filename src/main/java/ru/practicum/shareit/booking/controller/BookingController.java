@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(path = "/bookings")
 public class BookingController {
 
-    BookingService bookingService;
+    private BookingService bookingService;
 
     @PostMapping
     public BookingResponseDto createBooking(@Valid @RequestBody BookingIncomingDto bookingIncomingDto,

@@ -1,13 +1,13 @@
 package ru.practicum.shareit.booking.model;
 
-import org.springframework.stereotype.Service;
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@UtilityClass
 public class BookingMapper {
 
     public static Booking toNewBooking(BookingIncomingDto bookingIncomingDto, Item item, User booker) {
