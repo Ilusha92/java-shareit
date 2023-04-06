@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.experimental.UtilityClass;
-import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingMapper;
 
