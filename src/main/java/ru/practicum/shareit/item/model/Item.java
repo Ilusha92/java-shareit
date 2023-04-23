@@ -25,18 +25,19 @@ public class Item {
     private Boolean available;
     @Column(name = "owner_Id",nullable = false)
     private Long ownerId;
+    @Column(name = "requestId")
+    private Long requestId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Item)) return false;
         Item item = (Item) o;
-        return id.equals(item.id) && name.equals(item.name) && description.equals(item.description) &&
-                available.equals(item.available) && ownerId.equals(item.ownerId);
+        return Objects.equals(id, item.id) && Objects.equals(name, item.name) && Objects.equals(description, item.description) && Objects.equals(available, item.available) && Objects.equals(ownerId, item.ownerId) && Objects.equals(requestId, item.requestId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, available, ownerId);
+        return Objects.hash(id, name, description, available, ownerId, requestId);
     }
 }

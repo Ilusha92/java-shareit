@@ -20,14 +20,14 @@ public class BookingMapper {
 
     public static BookingDto toBookingDto(Booking booking) {
         return new BookingDto(booking.getId(),booking.getStart(), booking.getEnd(), booking.getStatus(),
-                booking.getBooker(), booking.getItem());
+                booking.getBooker(), booking.getItem(), booking.getItem().getName());
     }
 
     public static List<BookingDto> toListBookingDto(List<Booking> bookings) {
             return bookings.stream().map(BookingMapper::toBookingDto).collect(Collectors.toList());
     }
 
-    public static BookingInItemDto bookingInItemDto(Booking booking) {
+    public static BookingInItemDto toBookingInItemDto(Booking booking) {
         if (booking == null) return null;
 
         BookingInItemDto dto = new BookingInItemDto();
@@ -37,4 +37,5 @@ public class BookingMapper {
         dto.setEnd(booking.getEnd());
         return dto;
     }
+
 }

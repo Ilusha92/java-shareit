@@ -21,4 +21,5 @@ public class BookingDto {
     private Status status;
     private User booker;
     private Item item;
+    private String name;
 }
