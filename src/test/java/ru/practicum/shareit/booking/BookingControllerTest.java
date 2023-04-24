@@ -1,6 +1,8 @@
 package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,13 +41,15 @@ public class BookingControllerTest {
     public static final String APPROVED_VALUE = "true";
     public static final String APPROVED_PARAM = "approved";
     public static final String USER_ID_HEADER = "X-Sharer-User-Id";
-    public static final LocalDateTime START_DATE = LocalDateTime.now();
+    public static final LocalDateTime START_DATE = LocalDateTime.now().plusDays(1);
     public static final LocalDateTime END_DATE = START_DATE.plusDays(7);
 
     @MockBean
     BookingService bookingService;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .build();
 
     @Autowired
     MockMvc mvc;
@@ -66,10 +70,11 @@ public class BookingControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(responseDto.getId()),  Long.class))
-                .andExpect(jsonPath("$.item", is(responseDto.getItem().getName()),  Item.class));
+                .andExpect(jsonPath("$.item", is(responseDto.getItem()),  Item.class));
 
         verify(bookingService, times(1))
                 .createBooking(any(BookingIncomingDto.class), any(Long.class));
+
     }
 
     @Test
@@ -142,6 +147,9 @@ public class BookingControllerTest {
     private BookingIncomingDto generateInputDto() {
         BookingIncomingDto dto = new BookingIncomingDto();
         dto.setId(ID);
+        dto.setItemId(ID);
+        dto.setStart(START_DATE);
+        dto.setEnd(END_DATE);
         return dto;
     }
 

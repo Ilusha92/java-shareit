@@ -112,7 +112,7 @@ public class BookingServiceTest {
         when(itemRepository.findById(any(Long.class)))
                 .thenReturn(Optional.ofNullable(item));
 
-        BookerAndOwnerIdException e = assertThrows(BookerAndOwnerIdException.class,
+        UnavailableItemException e = assertThrows(UnavailableItemException.class,
                 () -> {
                     bookingService.createBooking(bookingIncomingDto, ID);
                 });
@@ -128,7 +128,7 @@ public class BookingServiceTest {
         when(itemRepository.findById(any(Long.class)))
                 .thenReturn(Optional.ofNullable(item));
 
-        UnavailableItemException e = assertThrows(UnavailableItemException.class,
+        BookerAndOwnerIdException e = assertThrows(BookerAndOwnerIdException.class,
                 () -> {
                     bookingService.createBooking(bookingIncomingDto, ID);
                 });
@@ -223,6 +223,15 @@ public class BookingServiceTest {
 
     @Test
     public void findAllByBookerStateRejectedTest() {
+
+        Booking bookingRejected = new Booking(ID,
+                DATE,
+                DATE.plusDays(7),
+                item,
+                user,
+                Status.REJECTED);
+        bookingRepository.save(bookingRejected);
+
         when(userRepository.findById(any(Long.class)))
                 .thenReturn(Optional.ofNullable(user));
 
@@ -231,7 +240,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByBooker("rejected", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByBooker("REJECTED", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -247,7 +256,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByBooker("waiting", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByBooker("WAITING", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -263,7 +272,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByBooker("current", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByBooker("CURRENT", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -279,7 +288,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByBooker("future", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByBooker("FUTURE", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -295,7 +304,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByBooker("past", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByBooker("PAST", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -311,7 +320,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(List.of(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByBooker("all", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByBooker("ALL", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -329,7 +338,7 @@ public class BookingServiceTest {
         WrongStateException e = assertThrows(WrongStateException.class,
                 () -> {
                     bookingService
-                            .findAllByBooker("unsupported", ID, FROM_VALUE, SIZE_VALUE);
+                            .findAllByBooker("UNSUPPORTED", ID, FROM_VALUE, SIZE_VALUE);
                 });
         assertNotNull(e);
     }
@@ -345,7 +354,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByItemOwner("rejected", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByItemOwner("REJECTED", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -362,7 +371,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByItemOwner("waiting", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByItemOwner("WAITING", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -379,7 +388,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByItemOwner("current", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByItemOwner("CURRENT", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -396,7 +405,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByItemOwner("future", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByItemOwner("FUTURE", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -413,7 +422,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByItemOwner("past", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByItemOwner("PAST", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -430,7 +439,7 @@ public class BookingServiceTest {
                 .thenReturn(new PageImpl<>(Collections.singletonList(booking)));
 
         List<BookingDto> result = bookingService
-                .findAllByItemOwner("all", ID, FROM_VALUE, SIZE_VALUE);
+                .findAllByItemOwner("ALL", ID, FROM_VALUE, SIZE_VALUE);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
