@@ -10,6 +10,7 @@ import ru.practicum.shareit.item.exceptions.CommentException;
 import ru.practicum.shareit.item.exceptions.DeniedAccessException;
 import ru.practicum.shareit.item.exceptions.OwnerNotFoundException;
 import ru.practicum.shareit.user.exceptions.EmailValidationException;
+import ru.practicum.shareit.user.exceptions.UserNotFoundException;
 
 import java.util.NoSuchElementException;
 
@@ -91,6 +92,14 @@ public class ErrorHandlerTest {
         ErrorResponse errorResponse = handler.handle(e);
         assertNotNull(errorResponse);
         assertEquals(errorResponse.getDescription(), "Email занят 409:");
+    }
+
+    @Test
+    public void handleUserNotFoundExceptionTest() {
+        UserNotFoundException e = new UserNotFoundException("Пользовательн не найден");
+        ErrorResponse errorResponse = handler.handle(e);
+        assertNotNull(errorResponse);
+        assertEquals(errorResponse.getDescription(), "Пользовательн не найден");
     }
 
 }
