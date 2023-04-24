@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request.model;
 
+import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.model.ItemInRequestDto;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@UtilityClass
 public class ItemRequestMapper {
 
     public static ItemRequest toItemRequest(ItemRequestIncomingDto dto, Long requestorId) {
