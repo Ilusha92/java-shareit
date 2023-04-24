@@ -9,6 +9,7 @@ import ru.practicum.shareit.error.ErrorResponse;
 import ru.practicum.shareit.item.exceptions.CommentException;
 import ru.practicum.shareit.item.exceptions.DeniedAccessException;
 import ru.practicum.shareit.item.exceptions.OwnerNotFoundException;
+import ru.practicum.shareit.user.exceptions.EmailValidationException;
 
 import java.util.NoSuchElementException;
 
@@ -83,4 +84,13 @@ public class ErrorHandlerTest {
         assertNotNull(errorResponse);
         assertEquals(errorResponse.getDescription(), "невозможно оставить комментарий 400: ");
     }
+
+    @Test
+    public void handleEmailValidationExceptionTest() {
+        EmailValidationException e = new EmailValidationException("Email занят 409:");
+        ErrorResponse errorResponse = handler.handle(e);
+        assertNotNull(errorResponse);
+        assertEquals(errorResponse.getDescription(), "Email занят 409:");
+    }
+
 }
