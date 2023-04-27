@@ -1,5 +1,7 @@
-package ru.practicum.shareit.booking.service;
+package ru.practicum.shareit.booking.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,44 +13,39 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    List<Booking> findByBookerIdAndEndIsBefore(Long bookerId, LocalDateTime now, Sort sort);
+    Page<Booking> findByBookerIdAndEndIsBefore(Long bookerId, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findByBookerIdAndStartIsAfter(Long bookerId, LocalDateTime now, Sort sort);
+    Page<Booking> findByBookerIdAndStartIsAfter(Long bookerId, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findByBookerIdAndStatus(Long bookerId, Status status, Sort sort);
+    Page<Booking> findByBookerIdAndStatus(Long bookerId, Status status, Pageable pageable);
 
-    List<Booking> findByBookerId(Long bookerId, Sort sort);
+    Page<Booking> findByBookerId(Long bookerId, Pageable pageable);
 
-    List<Booking> findBookingByItemOwnerIdAndStatus(Long bookerId, Status status, Sort sort);
+    Page<Booking> findBookingByItemOwnerIdAndStatus(Long bookerId, Status status, Pageable pageable);
 
-    List<Booking> findBookingByItemOwnerIdAndEndIsBefore(Long bookerId, LocalDateTime now, Sort sort);
+    Page<Booking> findBookingByItemOwnerIdAndEndIsBefore(Long bookerId, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findBookingByItemOwnerIdAndStartIsAfter(Long bookerId, LocalDateTime now, Sort sort);
+    Page<Booking> findBookingByItemOwnerIdAndStartIsAfter(Long bookerId, LocalDateTime now, Pageable pageable);
 
-    List<Booking> findBookingByItemOwnerId(Long bookerId, Sort sort);
-
-    List<Booking> findBookingByItemIdAndEndBeforeAndStatus(Long itemId, LocalDateTime now, Sort sort, Status status);
+    Page<Booking> findBookingByItemOwnerId(Long bookerId, Pageable pageable);
 
     List<Booking> findBookingByItemIdAndStartAfterAndStatus(Long itemId, LocalDateTime now, Sort sort, Status status);
 
     List<Booking> findBookingByItemIdAndStartBeforeAndStatus(Long itemId, LocalDateTime now, Sort sort, Status status);
-
-    List<Booking> findBookingByItemIdAndEndAfterAndStatus(Long itemId, LocalDateTime now, Sort sort, Status status);
-
 
     @Query("select b from bookings b " +
             "where b.booker.id = ?1 " +
             "and b.start < ?2 " +
             "and b.end > ?2 " +
             "order by b.start asc ")
-    List<Booking> findByBookerIdCurrent(Long userId,LocalDateTime now);
+    Page<Booking> findByBookerIdCurrent(Long userId,LocalDateTime now, Pageable pageable);
 
     @Query("select b from bookings b " +
             "where b.item.ownerId = ?1 " +
             "and b.start < ?2 " +
             "and b.end > ?2 " +
             "order by b.start asc")
-    List<Booking> findBookingsByItemOwnerCurrent(Long userId, LocalDateTime now);
+    Page<Booking> findBookingsByItemOwnerCurrent(Long userId, LocalDateTime now, Pageable pageable);
 
     @Query("select b from bookings b " +
             " where b.item.id = ?1 " +

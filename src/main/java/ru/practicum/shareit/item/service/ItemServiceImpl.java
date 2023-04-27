@@ -2,17 +2,23 @@ package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
-import ru.practicum.shareit.booking.service.BookingRepository;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.item.exceptions.CommentException;
 import ru.practicum.shareit.item.exceptions.DeniedAccessException;
 import ru.practicum.shareit.item.exceptions.OwnerNotFoundException;
 import ru.practicum.shareit.item.model.*;
+import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.service.UserRepository;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
@@ -30,6 +37,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public ItemDto createItem(ItemDto itemDto, Long userId) {
         Item item = ItemMapper.toItem(itemDto, userId);
         boolean ownerExists = isOwnerExists(item.getOwnerId());
@@ -41,6 +49,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public ItemDto updateItem(ItemDto itemDto, Long ownerId, Long itemId) {
         Item item = ItemMapper.toItem(itemDto, ownerId);
         item.setId(itemId);
@@ -50,10 +59,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAllItems(Long userId) {
-        List<Item> userItems = itemRepository.findAll()
-                .stream().filter(item -> item.getOwnerId().equals(userId))
-                .collect(Collectors.toList());
+    public List<ItemDto> getAllItems(Long userId, int from, int size) {
+
+        Pageable pageable = PageRequest.of(from / size, size);
+        Page<Item> itemPage = itemRepository.findAll(userId, pageable);
+        List<Item> userItems = itemPage.toList();
 
         List<ItemDto> result = new ArrayList<>();
         fillItemDtoList(result, userItems, userId);
@@ -79,20 +89,20 @@ public class ItemServiceImpl implements ItemService {
         return result;
     }
 
-
-
     @Override
-    public List<ItemDto> findItemsByRequest(String text, Long userId) {
+    public List<ItemDto> findItemsByRequest(String text, Long userId, int from, int size) {
         if (text == null || text.isBlank()) {
             return new ArrayList<>();
         }
         List<ItemDto> result = new ArrayList<>();
-        List<Item> foundItems = itemRepository.search(text);
+        Pageable pageable = PageRequest.of(from / size, size);
+        List<Item> foundItems = itemRepository.search(text, pageable);
         fillItemDtoList(result, foundItems, userId);
         return result;
     }
 
     @Override
+    @Transactional
     public CommentDto createComment(CreateCommentDto dto, Long itemId, Long userId) {
         if (dto.getText().isBlank()) throw new CommentException("Comment cant be blank");
         Item item = itemRepository.findById(itemId).orElseThrow();
@@ -141,13 +151,13 @@ public class ItemServiceImpl implements ItemService {
         Sort sortDesc = Sort.by("start").descending();
         Sort sortAsc = Sort.by("start").ascending();
 
+        List<Comment> comments = commentRepository.findAllByItemIn(foundItems);
         for (Item item : foundItems) {
-            List<Comment> comments = commentRepository.findByItemId(item.getId());
             if (item.getOwnerId().equals(userId)) {
                 ItemDto dto = constructItemDtoForOwner(item, now, sortDesc, sortAsc, comments);
                 targetList.add(dto);
             } else {
-                targetList.add(ItemMapper.toItemDto(item, comments));
+                targetList.add(ItemMapper.toItemDto(item,comments));
             }
         }
     }
@@ -163,7 +173,7 @@ public class ItemServiceImpl implements ItemService {
             Sort sortAsc = Sort.by("start").ascending();
             return constructItemDtoForOwner(item, now, sortDesc, sortAsc, comments);
         }
-        return ItemMapper.toDto(item, null, null, comments);
+        return ItemMapper.toItemDtoForOwner(item, null, null, comments);
     }
 
     private ItemDto constructItemDtoForOwner(Item item, LocalDateTime now, Sort sortDesc, Sort sortAsc, List<Comment> comments) {
@@ -174,7 +184,7 @@ public class ItemServiceImpl implements ItemService {
                 bookingRepository.findBookingByItemIdAndStartAfterAndStatus(item.getId(), now, sortAsc, Status.APPROVED)
                         .stream().findFirst().orElse(null);
 
-        return ItemMapper.toDto(item,
+        return ItemMapper.toItemDtoForOwner(item,
                 lastBooking,
                 nextBooking,
                 comments);
