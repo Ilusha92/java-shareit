@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.exceptions.BookerAndOwnerIdException;
 import ru.practicum.shareit.booking.exceptions.UnavailableItemException;
 import ru.practicum.shareit.booking.exceptions.WrongStateException;
@@ -24,6 +25,7 @@ import static ru.practicum.shareit.booking.model.Status.WAITING;
 
 @Service
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
 
     private final UserRepository userRepository;
@@ -31,6 +33,7 @@ public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
 
     @Override
+    @Transactional
     public BookingResponseDto createBooking(BookingIncomingDto bookingIncomingDto, Long userId) {
 
         if (!bookingIncomingDto.getEnd().isAfter(bookingIncomingDto.getStart())) {
@@ -53,6 +56,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingResponseDto patchBooking(Long bookingId, Boolean approved, Long userId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow();
         Item item = itemRepository.findById(booking.getItem().getId()).orElseThrow();

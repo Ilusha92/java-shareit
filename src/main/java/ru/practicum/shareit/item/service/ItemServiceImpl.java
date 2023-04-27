@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @AllArgsConstructor
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
@@ -35,6 +37,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public ItemDto createItem(ItemDto itemDto, Long userId) {
         Item item = ItemMapper.toItem(itemDto, userId);
         boolean ownerExists = isOwnerExists(item.getOwnerId());
@@ -46,6 +49,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public ItemDto updateItem(ItemDto itemDto, Long ownerId, Long itemId) {
         Item item = ItemMapper.toItem(itemDto, ownerId);
         item.setId(itemId);
@@ -98,6 +102,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public CommentDto createComment(CreateCommentDto dto, Long itemId, Long userId) {
         if (dto.getText().isBlank()) throw new CommentException("Comment cant be blank");
         Item item = itemRepository.findById(itemId).orElseThrow();
@@ -146,13 +151,13 @@ public class ItemServiceImpl implements ItemService {
         Sort sortDesc = Sort.by("start").descending();
         Sort sortAsc = Sort.by("start").ascending();
 
+        List<Comment> comments = commentRepository.findAllByItemIn(foundItems);
         for (Item item : foundItems) {
-            List<Comment> comments = commentRepository.findByItemId(item.getId());
             if (item.getOwnerId().equals(userId)) {
                 ItemDto dto = constructItemDtoForOwner(item, now, sortDesc, sortAsc, comments);
                 targetList.add(dto);
             } else {
-                targetList.add(ItemMapper.toItemDto(item, comments));
+                targetList.add(ItemMapper.toItemDto(item,comments));
             }
         }
     }
