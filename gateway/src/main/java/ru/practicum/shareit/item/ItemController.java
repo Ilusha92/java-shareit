@@ -46,7 +46,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{itemId}")
-    public ResponseEntity<Object> updateItem(@Valid
+    public ResponseEntity<Object> updateItem(
                               @RequestBody ItemDto itemDto,
                               @NotNull(message = NULL_ITEM_ID_MESSAGE)
                               @Min(MIN_VALUE)
