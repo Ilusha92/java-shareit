@@ -152,6 +152,7 @@ public class ItemServiceImpl implements ItemService {
         Sort sortAsc = Sort.by("start").ascending();
 
         List<Comment> comments = commentRepository.findAllByItemIn(foundItems);
+
         for (Item item : foundItems) {
             if (item.getOwnerId().equals(userId)) {
                 ItemDto dto = constructItemDtoForOwner(item, now, sortDesc, sortAsc, comments);
