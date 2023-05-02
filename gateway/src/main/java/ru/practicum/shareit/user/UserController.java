@@ -44,7 +44,6 @@ public class UserController {
     public ResponseEntity<Object> updateUser(@NotNull(message = NULL_USER_ID_MESSAGE)
                               @Min(MIN_ID_VALUE)
                               @PathVariable Long userId,
-                              @Valid
                               @RequestBody UserDto userDto) {
         log.info("Updating userId={}, user {}", userId, userDto);
         return userClient.updateUser(userId, userDto);
